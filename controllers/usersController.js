@@ -16,7 +16,9 @@ exports.index = async (req, res) => {
     } 
     // This is prob not how this should function - if the user leaves the username field blank, it sends all users instead of an error msg
     else {
-        let allUsers = await User.findAll()
+        let allUsers = await User.findAll({
+            include: 'lists'
+        })
         res.status(200).send(allUsers)
     }
 }
@@ -45,13 +47,8 @@ exports.create = async (req, res) => {
     const { username, email, password } = req.body
     try{
         let newUser = await User.create({ username, email, password })
-        List.findAll({
-            where: {
-                user_id: newUser.id
-            }
-        })
-        .then(console.log)
-        res.status(200).json(newUser)
+        await List.create({name: "My Movies", user_id: newUser.id})
+        res.status(200).json({status: "Successful", data: newUser})
     } catch(error) {
         res.status(500).json(error)
     }
