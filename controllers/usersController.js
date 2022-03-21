@@ -1,7 +1,6 @@
-// const express = require("express")
-// const users = express.Router()
 const db = require("../models");
 const User = db.Users;
+const List = db.Lists
 const bcrypt = require("bcryptjs")
 
 exports.index = async (req, res) => {
@@ -46,7 +45,12 @@ exports.create = async (req, res) => {
     const { username, email, password } = req.body
     try{
         let newUser = await User.create({ username, email, password })
-        console.log(newUser)
+        List.findAll({
+            where: {
+                user_id: newUser.id
+            }
+        })
+        .then(console.log)
         res.status(200).json(newUser)
     } catch(error) {
         res.status(500).json(error)
