@@ -3,7 +3,7 @@ const router = express.Router()
 
 const users = require("../controllers/usersController.js")
 
-router.get("/", users.index)
+router.get("/", users.search)
 router.post("/", users.create)
 router.post("/login", users.login)
 router.get("/:id", users.getById)

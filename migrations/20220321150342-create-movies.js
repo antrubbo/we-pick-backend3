@@ -4,7 +4,7 @@ module.exports = {
     await queryInterface.createTable('Movies', {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
@@ -20,12 +20,9 @@ module.exports = {
       poster_path: {
         type: Sequelize.STRING
       },
-      tmdbId: {
-        type: Sequelize.INTEGER
-      },
-      rating: {
-        type: Sequelize.STRING
-      },
+      // rating: {
+      //   type: Sequelize.STRING
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

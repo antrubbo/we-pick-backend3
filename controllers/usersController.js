@@ -3,7 +3,7 @@ const User = db.Users;
 const List = db.Lists
 const bcrypt = require("bcryptjs")
 
-exports.index = async (req, res) => {
+exports.search = async (req, res) => {
     const { username, email } = req.query
     if (username) {
         let foundUser = await User.findAll({ where: { username } })

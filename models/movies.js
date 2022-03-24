@@ -4,6 +4,7 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Movies extends Model {
+    otherPublicField
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -15,12 +16,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Movies.init({
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: false,
+      primaryKey: true
+    },
     title: DataTypes.STRING,
     release_date: DataTypes.STRING,
     runtime: DataTypes.INTEGER,
     poster_path: DataTypes.STRING,
-    tmdbId: DataTypes.INTEGER,
-    rating: DataTypes.STRING
+    // rating: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Movies',

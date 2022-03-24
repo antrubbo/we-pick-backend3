@@ -1,7 +1,7 @@
 // const express = require("express")
 // const movies = express.Router()
 const db = require("../models");
-const Movie = db.movies;
+const Movie = db.Movies;
 const axios = require('axios');
 
 require('dotenv').config()
@@ -28,4 +28,14 @@ exports.getPopular = (req, res) => {
     axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${KEY}&language=en-US&page=1`)
     .then(response => {res.json(response.data)})
     .catch(response => response.status(404).json( {error: "Unable to get popular movies."} ))
+}
+
+exports.create = async (req, res) => {
+    const { id, title, release_date, runtime, poster_path } = req.body
+    try{
+        let newMovie = await Movie.create({ id, title, release_date, runtime, poster_path })
+        res.status(200).json({status: "Successful", data: newMovie})
+    } catch (error) {
+        res.status(500).json(error)
+    }
 }
