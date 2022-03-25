@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         as: "user",
         foreignKey: "user_id"
       })
-      Lists.belongsToMany(models.Movies, { through: "ListMovies", /* options */ })
+      Lists.belongsToMany(models.Movies, { 
+        through: "ListMovies",
+        as: "movies" 
+      })
     }
   }
   Lists.init({

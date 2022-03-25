@@ -2,6 +2,7 @@
 // const movies = express.Router()
 const db = require("../models");
 const Movie = db.Movies;
+const List = db.Lists;
 const axios = require('axios');
 
 require('dotenv').config()
@@ -31,9 +32,12 @@ exports.getPopular = (req, res) => {
 }
 
 exports.create = async (req, res) => {
-    const { id, title, release_date, runtime, poster_path } = req.body
+    const { id, title, release_date, runtime, poster_path, list_id } = req.body
     try{
         let newMovie = await Movie.create({ id, title, release_date, runtime, poster_path })
+        let list = await List.findAll({ where: id === list_id})
+        console.log(list[0].dataValues.id) // this is incomplete, trying to get listId
+        newMovie.addList({ MovieId: newMovie.id, ListId:  })
         res.status(200).json({status: "Successful", data: newMovie})
     } catch (error) {
         res.status(500).json(error)
