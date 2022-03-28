@@ -17,7 +17,7 @@ exports.search = async (req, res) => {
     // This is prob not how this should function - if the user leaves the username field blank, it sends all users instead of an error msg
     else {
         let allUsers = await User.findAll({
-            include: 'lists'
+            include: { all: true, nested: true }
         })
         res.status(200).send(allUsers)
     }
