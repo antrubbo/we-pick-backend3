@@ -3,7 +3,7 @@ const User = db.Users;
 const List = db.Lists
 const bcrypt = require("bcryptjs")
 
-exports.search = async (req, res) => {
+const search = async (req, res) => {
     const { username, email } = req.query
     if (username) {
         let foundUser = await User.findAll({ where: { username } })
@@ -23,14 +23,14 @@ exports.search = async (req, res) => {
     }
 }
 
-exports.getById = async (req, res) => {
+const getById = async (req, res) => {
     let { id } = req.params;
     let user = await User.findByPk(id)
     if (user) res.status(200).send(user)
     else res.status(404).json({ error: "No user found"})
 }
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
     const { password, email } = req.body
     let foundUser = await User.findAll({ where: { email } })
     if (!foundUser.length) {
@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.create = async (req, res) => {
+const create = async (req, res) => {
     const { username, email, password } = req.body
     try{
         let newUser = await User.create({ username, email, password })
@@ -54,7 +54,7 @@ exports.create = async (req, res) => {
     }
 }
 
-exports.update = async (req, res) => {
+const update = async (req, res) => {
     const { id } = req.params;
     const { body } = req
     let user = await User.findByPk(id)
@@ -65,9 +65,11 @@ exports.update = async (req, res) => {
     else res.status(400).json({ message: "Must include all fields!" })
 }   
 
-exports.deleteOne = async (req, res) => {
+const deleteOne = async (req, res) => {
     let { id } = req.params;
     let result = await User.destroy({ where: { id } });
     if (result) res.status(200).json({ message: "Delete successful!" })
     else res.status(500).json({ message: "No User found to delete!" })
 }
+
+module.exports = { search, getById, login, create, update, deleteOne }
