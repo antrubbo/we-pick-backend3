@@ -44,6 +44,7 @@ const getPopular = (req, res) => {
 }
 
 const findOrCreate = async (req, res) => {
+    // should use sequelize findOrCreate method?!
     const {id} = req.params
     let movieToFind = await getById(id)
     if(!movieToFind){

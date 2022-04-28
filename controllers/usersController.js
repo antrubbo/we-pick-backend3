@@ -1,7 +1,9 @@
 const db = require("../models");
 const User = db.Users;
 const List = db.Lists
-const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const generateAccessToken = require("../helpers/authentication")
+
 
 const search = async (req, res) => {
     const { username, email } = req.query
@@ -33,6 +35,7 @@ const getById = async (req, res) => {
 const login = async (req, res) => {
     const { password, email } = req.body
     let foundUser = await User.findAll({ where: { email } })
+    const accessToken = generateAccessToken(newUser);
     if (!foundUser.length) {
         // errors.email = 'User not found!';
         res.status(404).json({error: "User not found!!"})
@@ -48,7 +51,9 @@ const create = async (req, res) => {
     try{
         let newUser = await User.create({ username, email, password })
         await List.create({name: "My Movies", user_id: newUser.id})
-        res.status(200).json({status: "Successful", data: newUser})
+        // accessToken may or may not be working, keep testing - user IS being created though
+        // const accessToken = generateAccessToken(newUser);
+        res.status(200).json({ status: "Successful", data: newUser, token: "Bearer" + accessToken })
     } catch(error) {
         res.status(500).json(error)
     }
@@ -68,8 +73,11 @@ const update = async (req, res) => {
 const deleteOne = async (req, res) => {
     let { id } = req.params;
     let result = await User.destroy({ where: { id } });
-    if (result) res.status(200).json({ message: "Delete successful!" })
+    // let list = await List.destroy({ where: {user_id: id}})
+    if (result) res.status(200).json({ message: "Delete successful!", list: list })
     else res.status(500).json({ message: "No User found to delete!" })
+
+    // crashing and getting this error : error: update or delete on table "Users" violates foreign key constraint "Lists_user_id_fkey" on table "Lists"
 }
 
 module.exports = { search, getById, login, create, update, deleteOne }
