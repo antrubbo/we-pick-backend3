@@ -12,8 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Users.hasMany(models.Lists, {
         foreignKey: "user_id",
-        // as has to match include in the user controller
-        as: "lists"
+        // "as" has to match "include" in the user controller
+        as: "lists",
+        // onDelete: 'CASCADE'
       });
     }
   }
@@ -31,11 +32,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    // hooks: {
-    //   afterCreate: (user, opts) => {
-    //     user.lists.create({name: user.username, user_id: user.id})
-    //   }
-    // },
     sequelize,
     modelName: 'Users',
   });

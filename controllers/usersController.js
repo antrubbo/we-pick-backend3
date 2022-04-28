@@ -2,7 +2,7 @@ const db = require("../models");
 const User = db.Users;
 const List = db.Lists
 const jwt = require("jsonwebtoken")
-const generateAccessToken = require("../helpers/authentication")
+const { generateAccessToken } = require("../helpers/authentication")
 
 
 const search = async (req, res) => {
@@ -35,15 +35,14 @@ const getById = async (req, res) => {
 const login = async (req, res) => {
     const { password, email } = req.body
     let foundUser = await User.findAll({ where: { email } })
-    const accessToken = generateAccessToken(newUser);
-    if (!foundUser.length) {
-        // errors.email = 'User not found!';
-        res.status(404).json({error: "User not found!!"})
-    } else {
-        let originalPassword = foundUser[0].password
-        console.log("originalPassword: ", originalPassword)
-        console.log("password: ", password)
-    }
+    const accessToken = generateAccessToken(foundUser);
+    console.log(accessToken)
+    // if (!foundUser.length) {
+    //     // errors.email = 'User not found!';
+    //     res.status(404).json({error: "User not found!!"})
+    // } else {
+    //     res.status(200).json({ status: "Logged In", data: foundUser, token: "Bearer" + accessToken })
+    // }
 }
 
 const create = async (req, res) => {
@@ -51,9 +50,7 @@ const create = async (req, res) => {
     try{
         let newUser = await User.create({ username, email, password })
         await List.create({name: "My Movies", user_id: newUser.id})
-        // accessToken may or may not be working, keep testing - user IS being created though
-        // const accessToken = generateAccessToken(newUser);
-        res.status(200).json({ status: "Successful", data: newUser, token: "Bearer" + accessToken })
+        res.status(200).json({ status: "Successful", data: newUser })
     } catch(error) {
         res.status(500).json(error)
     }
@@ -72,12 +69,11 @@ const update = async (req, res) => {
 
 const deleteOne = async (req, res) => {
     let { id } = req.params;
+    // this is now working - can this be accomplished by having onDelete = "cascade?"
+    let list = await List.destroy({ where: {user_id: id}})
     let result = await User.destroy({ where: { id } });
-    // let list = await List.destroy({ where: {user_id: id}})
     if (result) res.status(200).json({ message: "Delete successful!", list: list })
     else res.status(500).json({ message: "No User found to delete!" })
-
-    // crashing and getting this error : error: update or delete on table "Users" violates foreign key constraint "Lists_user_id_fkey" on table "Lists"
 }
 
 module.exports = { search, getById, login, create, update, deleteOne }
