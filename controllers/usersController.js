@@ -2,7 +2,8 @@ const db = require("../models");
 const User = db.Users;
 const List = db.Lists
 const jwt = require("jsonwebtoken")
-const { generateAccessToken } = require("../helpers/authentication")
+const { generateAccessToken } = require("../helpers/generateAccessToken")
+// const { authenticateToken } = require("../helpers/authenticateToken")
 
 
 const search = async (req, res) => {
@@ -36,13 +37,12 @@ const login = async (req, res) => {
     const { password, email } = req.body
     let foundUser = await User.findAll({ where: { email } })
     const accessToken = generateAccessToken(foundUser);
-    console.log(accessToken)
-    // if (!foundUser.length) {
-    //     // errors.email = 'User not found!';
-    //     res.status(404).json({error: "User not found!!"})
-    // } else {
-    //     res.status(200).json({ status: "Logged In", data: foundUser, token: "Bearer" + accessToken })
-    // }
+    // console.log(accessToken)
+    if (!foundUser.length) {
+        res.status(404).json({error: "User not found!!"})
+    } else {
+        res.status(200).json({ status: "Logged In", data: foundUser, token: "Bearer " + accessToken })
+    }
 }
 
 const create = async (req, res) => {
