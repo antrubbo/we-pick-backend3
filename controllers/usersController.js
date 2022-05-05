@@ -37,7 +37,6 @@ const login = async (req, res) => {
     const { password, email } = req.body
     let foundUser = await User.findAll({ where: { email } })
     const accessToken = generateAccessToken(foundUser);
-    // console.log(accessToken)
     if (!foundUser.length) {
         res.status(404).json({error: "User not found!!"})
     } else {

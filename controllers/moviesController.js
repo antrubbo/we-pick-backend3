@@ -39,8 +39,8 @@ const getById = async (id) => {
 
 const getPopular = (req, res) => {
     axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${KEY}&language=en-US&page=1`)
-    .then(response => {res.json(response.data)})
-    .catch(response => response.status(404).json( {error: "Unable to get popular movies."} ))
+    .then(response => res.json(response.data))
+    .catch(error => res.status(404).json( {error: "Unable to get popular movies."} ))
 }
 
 const findOrCreate = async (req, res) => {
