@@ -3,8 +3,6 @@ const User = db.Users;
 const List = db.Lists
 const jwt = require("jsonwebtoken")
 const { generateAccessToken } = require("../helpers/generateAccessToken")
-// const { authenticateToken } = require("../helpers/authenticateToken")
-
 
 const search = async (req, res) => {
     const { username, email } = req.query
@@ -68,10 +66,8 @@ const update = async (req, res) => {
 
 const deleteOne = async (req, res) => {
     let { id } = req.params;
-    // this is now working - can this be accomplished by having onDelete = "cascade?"
-    let list = await List.destroy({ where: {user_id: id}})
     let result = await User.destroy({ where: { id } });
-    if (result) res.status(200).json({ message: "Delete successful!", list: list })
+    if (result) res.status(200).json({ message: "Delete successful!" })
     else res.status(500).json({ message: "No User found to delete!" })
 }
 

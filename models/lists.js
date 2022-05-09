@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Lists.belongsTo(models.Users, {
         as: "user",
-        foreignKey: "user_id"
+        foreignKey: "user_id",
+        onDelete: "CASCADE"
       })
       Lists.belongsToMany(models.Movies, { 
         through: "ListMovies",

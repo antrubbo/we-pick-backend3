@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_id",
         // "as" has to match "include" in the user controller
         as: "lists",
-        // onDelete: 'CASCADE'
       });
     }
   }
