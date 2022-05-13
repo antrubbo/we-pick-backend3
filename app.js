@@ -18,7 +18,7 @@ app.use("/api/movies", movieRoutes)
 const userRoutes = require("./routes/user.routes.js")
 app.use("/api/users", userRoutes)
 const authRoutes = require("./routes/auth.routes.js")
-app.use("/api/authenticate", authRoutes)
+app.use("/api/auth", authRoutes)
 
 app.get("*", (req, res) => {
     res.status(404).json({error: "Page not found"})

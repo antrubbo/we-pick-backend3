@@ -34,11 +34,13 @@ const getById = async (req, res) => {
 const login = async (req, res) => {
     const { password, email } = req.body
     let foundUser = await User.findAll({ where: { email } })
+    // need to authenticate if user exists --------------------------------
+    // then, does the password validate
     const accessToken = generateAccessToken(foundUser);
     if (!foundUser.length) {
         res.status(404).json({error: "User not found!!"})
     } else {
-        res.status(200).json({ status: "Logged In", data: foundUser, token: "Bearer " + accessToken })
+        res.status(200).json({ status: "Success", data: foundUser, token: "Bearer " + accessToken })
     }
 }
 
